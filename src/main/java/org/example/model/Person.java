@@ -1,9 +1,6 @@
 package org.example.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity //указывает связь сущности и дб
 @Table(name = "Person") //соответсвующая таблица в бд
@@ -11,16 +8,23 @@ import jakarta.persistence.Table;
 public class Person {
     @Id
     @Column(name = "id") //сопоставляет колонки дб полям класса
+    //стратегия для последовательности в бд. Генератор указывается отдельно
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "seq_generator_person")
+    @SequenceGenerator(name="seq_generator_person",
+    sequenceName = "person_id_seq", //имя в бд
+            allocationSize = 1 //множитель ID: 20, 40, 60
+    )
     private int id;
     @Column(name = "name")
     private String name;
     @Column(name = "age")
+
     private int age;
 
     public Person() {}
 
-    public Person(int id, String name, int age) {
-        this.id = id;
+    public Person(String name, int age) {
         this.name = name;
         this.age = age;
     }
