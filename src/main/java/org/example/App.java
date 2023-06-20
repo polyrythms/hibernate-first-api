@@ -5,6 +5,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import java.util.List;
+
 
 public class App 
 {
@@ -20,15 +22,12 @@ public class App
         try {
             session.beginTransaction();
 
-            Person person1 = new Person("Test1", 30);
-            Person person2 = new Person("Test2", 40);
-            Person person3 = new Person("Test3", 50);
-            session.save(person1);
-            session.save(person2);
-            session.save(person3);
+            session.createQuery("delete from Person  where age < 30").executeUpdate();
+//            createQuery("FROM Person") is deprecated. use:
+//            List<Person> people2 = session.createQuery("FROM Person", Person.class).getResultList();
 
 
-            //закроем сессию
+
             session.getTransaction().commit();
         } finally {
             //зкароем фабрику
