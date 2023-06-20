@@ -2,6 +2,8 @@ package org.example.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity //указывает связь сущности и дб
 @Table(name = "Person") //соответсвующая таблица в бд
 // (можно не указываться, если имя класса совпадает)
@@ -9,18 +11,15 @@ public class Person {
     @Id
     @Column(name = "id") //сопоставляет колонки дб полям класса
     //стратегия для последовательности в бд. Генератор указывается отдельно
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,
-            generator = "seq_generator_person")
-    @SequenceGenerator(name="seq_generator_person",
-    sequenceName = "person_id_seq", //имя в бд
-            allocationSize = 1 //множитель ID: 20, 40, 60
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "name")
     private String name;
     @Column(name = "age")
-
     private int age;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Item> items;
 
     public Person() {}
 
@@ -53,8 +52,16 @@ public class Person {
         this.age = age;
     }
 
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
+
     @Override
     public String toString() {
-        return this.name + ", " + age;
+        return id + ", " + name + ", " + age;
     }
 }
