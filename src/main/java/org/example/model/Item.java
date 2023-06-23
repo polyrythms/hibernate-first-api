@@ -15,18 +15,15 @@ public class Item {
 
     }
 
-    public Item(String itemName, Person owner) {
+    public Item(String itemName) {
         this.itemName = itemName;
-        this.owner = owner;
     }
 
     @ManyToOne
     @JoinColumn(name="person_id", referencedColumnName = "id")
     private Person owner;
 
-    public Item(String item_name) {
-        this.itemName = itemName;
-    }
+
 
     public int getId() {
         return id;

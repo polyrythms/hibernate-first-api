@@ -1,7 +1,10 @@
 package org.example.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity //указывает связь сущности и дб
@@ -18,7 +21,10 @@ public class Person {
     @Column(name = "age")
     private int age;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToOne(mappedBy = "person", cascade = CascadeType.PERSIST)
+    private Passport passport;
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST)
     private List<Item> items;
 
     public Person() {}
@@ -60,6 +66,21 @@ public class Person {
         this.items = items;
     }
 
+    public Passport getPassport() {
+        return passport;
+    }
+
+    public void setPassport(Passport passport) {
+        this.passport = passport;
+        passport.setPerson(this);
+    }
+
+    public void addItem(Item item) {
+        if (this.items == null)
+            this.items = new ArrayList<>();
+        this.items.add(item);
+        item.setOwner(this);
+    }
     @Override
     public String toString() {
         return id + ", " + name + ", " + age;
